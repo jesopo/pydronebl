@@ -15,7 +15,7 @@ The RPC key, IP and ID below are fake.
 ### Looking up an IP
 
 returns `None` if not found
-```
+```python
 >>> from dronebl import DroneBL
 >>> d = DroneBL("04efa460cf244b6e88d9d2b8c31eb953")
 >>> # by IP
@@ -27,7 +27,7 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 ```
 
 ### Adding an IP
-```
+```python
 >>> d.add("198.51.100.123", 19, "abused VPN (connect verified)")
 (3174874, 'Added 198.51.100.123')
 >>> d.add("198.51.100.123", 19, "abused VPN (connect verified)")
@@ -35,7 +35,7 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 ```
 
 ### Removing an IP
-```
+```python
 >>> d.remove(3174874)
 (True, 'Removed 3174874')
 >>> d.remove(3174874)
@@ -46,7 +46,7 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 
 identical methods are offered on the async version of `DroneBL`, `AsyncDroneBL`
 
-```
+```python
 >>> from dronebl import AsyncDroneBL
 >>> d = AsyncDroneBL("04efa460cf244b6e88d9d2b8c31eb953")
 >>> r = await d.lookup("198.51.100.123")

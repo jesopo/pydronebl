@@ -4,6 +4,8 @@ with open("README.md", "r") as fh:
     long_description = fh.read()
 with open("VERSION", "r") as version_file:
     version = version_file.read().strip()
+with open("requirements.txt", "r") as requirements_file:
+    install_requires = requirements_file.read().splitlines()
 
 setuptools.setup(
     name="dronebl",
@@ -23,5 +25,6 @@ setuptools.setup(
         "Operating System :: POSIX",
         "Operating System :: Microsoft :: Windows"
     ],
-    python_requires='>=3.6'
+    python_requires='>=3.6',
+    install_requires=install_requires
 )

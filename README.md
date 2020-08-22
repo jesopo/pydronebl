@@ -6,6 +6,7 @@ The RPC key, IP and ID below are fake.
 
 ### looking up an IP
 
+returns `None` if not found
 ```
 >>> from dronebl import DroneBL
 >>> d = DroneBL("04efa460cf244b6e88d9d2b8c31eb953")

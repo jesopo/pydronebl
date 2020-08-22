@@ -37,6 +37,7 @@ class Lookup(object):
     def __repr__(self) -> str:
         pieces: List[str] = []
         pieces.append(f"id={self.id!r}")
+        pieces.append(f"type={self.type!r}")
         if self.port is not None:
             pieces.append(f"port={self.port!r}")
         pieces.append(f"datetime={self.datetime.isoformat()}")

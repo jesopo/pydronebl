@@ -12,7 +12,7 @@ returns `None` if not found
 >>> d = DroneBL("04efa460cf244b6e88d9d2b8c31eb953")
 >>> r = d.lookup("198.51.100.123")
 >>> r
-Lookup(id=3174874, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
+Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
 ```
 
 ### adding an IP

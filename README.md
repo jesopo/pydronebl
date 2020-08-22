@@ -1,10 +1,18 @@
 # pydronebl
 
-## usage
+[![Build Status](https://travis-ci.org/jesopo/pydronebl.svg?branch=master)](https://travis-ci.org/jesopo/pydronebl)
+
+## Installation
+
+```
+$ pip3 install dronebl
+```
+
+## Usage
 
 The RPC key, IP and ID below are fake.
 
-### looking up an IP
+### Looking up an IP
 
 returns `None` if not found
 ```
@@ -15,7 +23,7 @@ returns `None` if not found
 Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
 ```
 
-### adding an IP
+### Adding an IP
 ```
 >>> d.add("198.51.100.123", 19, "abused VPN (connect verified)")
 (True, 'Added 198.51.100.123')
@@ -23,7 +31,7 @@ Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (c
 (False, 'You already reported 198.51.100.123 as type 19')
 ```
 
-### removing an IP
+### Removing an IP
 ```
 >>> d.remove(3174874)
 (True, 'Removed 3174874')
@@ -31,7 +39,7 @@ Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (c
 (False, '3174874 already delisted')
 ```
 
-### async
+### Asyncified!
 
 identical methods are offered on the async version of `DroneBL`, `AsyncDroneBL`
 
@@ -43,6 +51,6 @@ identical methods are offered on the async version of `DroneBL`, `AsyncDroneBL`
 Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
 ```
 
-## contact
+## Contact
 
 Come say hi at [##jess on freenode](https://webchat.freenode.net/?channels=%23%23jess)

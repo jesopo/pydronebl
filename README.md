@@ -18,9 +18,12 @@ returns `None` if not found
 ```
 >>> from dronebl import DroneBL
 >>> d = DroneBL("04efa460cf244b6e88d9d2b8c31eb953")
->>> r = d.lookup("198.51.100.123")
->>> r
-Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
+>>> # by IP
+>>> d.lookup("198.51.100.123")
+Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
+>>> # by ID
+>>> d.lookup(3174874)
+Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
 ```
 
 ### Adding an IP

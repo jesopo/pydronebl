@@ -10,4 +10,4 @@ install:
 script:
   - pip3 freeze
   - mypy dronebl
-
+  - python3 -m unittest test

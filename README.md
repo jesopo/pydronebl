@@ -26,9 +26,9 @@ Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (c
 ### Adding an IP
 ```
 >>> d.add("198.51.100.123", 19, "abused VPN (connect verified)")
-(True, 'Added 198.51.100.123')
+(3174874, 'Added 198.51.100.123')
 >>> d.add("198.51.100.123", 19, "abused VPN (connect verified)")
-(False, 'You already reported 198.51.100.123 as type 19')
+(None, 'You already reported 198.51.100.123 as type 19')
 ```
 
 ### Removing an IP

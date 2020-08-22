@@ -49,9 +49,8 @@ identical methods are offered on the async version of `DroneBL`, `AsyncDroneBL`
 ```python
 >>> from dronebl import AsyncDroneBL
 >>> d = AsyncDroneBL("04efa460cf244b6e88d9d2b8c31eb953")
->>> r = await d.lookup("198.51.100.123")
->>> r
-Lookup(id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
+>>> await d.lookup("198.51.100.123")
+Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, comment='abused VPN (connect verified)')
 ```
 
 ## Contact

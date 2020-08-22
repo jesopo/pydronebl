@@ -91,7 +91,8 @@ class DroneBL(object):
 
         method_f  = method.format(ip=ip, type=type)
         responses = self._post(method_f)
-        if not responses:
+        if (not responses or
+                not responses[0].tag == "result"):
             return None
         else:
             response = responses[0]

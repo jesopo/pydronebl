@@ -30,6 +30,7 @@ class ParseTestLookup(unittest.TestCase):
             </response>
         """)
 
+        self.assertEqual(out.ip,       IP)
         self.assertEqual(out.id,       ID)
         self.assertEqual(out.type,     19)
         self.assertEqual(out.comment,  data)

@@ -23,6 +23,7 @@ def lookup(data: str) -> Optional[Lookup]:
         response = responses[0]
         port     = response.get("port", "")
         return Lookup(
+            response.get("ip", ""),
             int(response.get("id", "")),
             int(response.get("type", "")),
             response.get("comment", ""),

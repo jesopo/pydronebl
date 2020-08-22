@@ -3,11 +3,13 @@ from typing   import List, Optional
 
 class Lookup(object):
     def __init__(self,
+            ip:      str,
             id:      int,
             type:    int,
             comment: str,
             port:    Optional[int],
             ts:      int):
+        self.ip       = ip
         self.id       = id
         self.type     = type
         self.comment  = comment
@@ -15,11 +17,13 @@ class Lookup(object):
         self.datetime = datetime.utcfromtimestamp(ts)
 
     def __repr__(self) -> str:
-        pieces: List[str] = []
-        pieces.append(f"id={self.id!r}")
-        pieces.append(f"type={self.type!r}")
+        pieces: List[str] = [
+            self.ip,
+            f"id={self.id!r}",
+            f"type={self.type!r}",
+            f"datetime={self.datetime.isoformat()}",
+            f"comment={self.comment!r}"
+        ]
         if self.port is not None:
-            pieces.append(f"port={self.port!r}")
-        pieces.append(f"datetime={self.datetime.isoformat()}")
-        pieces.append(f"comment={self.comment!r}")
+            pieces.insert(3, f"port={self.port!r}")
         return f"Lookup({', '.join(pieces)})"

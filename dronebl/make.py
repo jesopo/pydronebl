@@ -7,7 +7,7 @@ def request(
         key:    str,
         method: bytes
         ) -> bytes:
-    return ENVELOPE % (key, method)
+    return ENVELOPE % (key.encode("ascii"), method)
 
 def lookup(
         query: Union[str, int],

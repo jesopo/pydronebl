@@ -1,4 +1,6 @@
 import unittest
+from binascii  import hexlify
+from uuid      import uuid4
 from xml.etree import ElementTree as et
 
 from dronebl import make
@@ -8,6 +10,19 @@ ID = 3174874
 
 def _xml(s: str) -> et.Element:
     return et.fromstring(s)
+
+class MakeTestRequest(unittest.TestCase):
+    def test(self):
+        key  = uuid4().hex
+        meth = b"<method />"
+        out  = make.request(key, meth)
+        xml  = _xml(out)
+
+        self.assertEqual(xml.tag,        "request")
+        self.assertEqual(xml.get("key"), key)
+        kids = list(xml)
+        self.assertEqual(len(kids),      1)
+        self.assertEqual(kids[0].tag,    "method")
 
 class MakeTestAdd(unittest.TestCase):
     def test_with_port(self):

@@ -14,15 +14,12 @@ def add(data: bytes) -> Tuple[Optional[int], str]:
         id, responses[0].get("data", "")
     )
 
-def lookup(data: bytes) -> Optional[Lookup]:
+def lookup(data: bytes) -> List[Lookup]:
     responses = _xml(data)
-    if (not responses or
-            not responses[0].tag == "result"):
-        return None
-    else:
-        response = responses[0]
-        port     = response.get("port", "")
-        return Lookup(
+    lookups: List[Lookup] = []
+    for response in responses:
+        port   = response.get("port", "")
+        lookup = Lookup(
             response.get("ip", ""),
             int(response.get("id", "")),
             int(response.get("type", "")),
@@ -30,6 +27,8 @@ def lookup(data: bytes) -> Optional[Lookup]:
             None if port == "" else int(port),
             int(response.get("timestamp", ""))
         )
+        lookups.append(lookup)
+    return lookups
 
 def remove(data: bytes) -> Tuple[bool, str]:
     responses = _xml(data)

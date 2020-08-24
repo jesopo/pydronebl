@@ -17,19 +17,21 @@ class ParseTestLookup(unittest.TestCase):
             <?xml version="1.0"?>
             <response type="success" />
         """)
-        self.assertIsNone(out)
+        self.assertEqual(out, [])
 
     def test_found(self):
         now  = datetime.utcnow().replace(microsecond=0)
         ts   = int(now.timestamp())
         data = _rand()
-        out  = parse.lookup(f"""
+        outs = parse.lookup(f"""
             <?xml version="1.0"?>
             <response type="success">
                 <result ip="{IP}" type="19" comment="{data}" id="{ID}" listed="1" timestamp="{ts}" />
             </response>
         """)
 
+        self.assertEqual(len(outs),    1)
+        out  = outs[0]
         self.assertEqual(out.ip,       IP)
         self.assertEqual(out.id,       ID)
         self.assertEqual(out.type,     19)

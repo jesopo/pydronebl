@@ -35,33 +35,42 @@ class MakeTestLookup(unittest.TestCase):
         out = make.lookup(IP, 19)
         xml = _xml(out)
 
-        self.assertEqual(xml.tag,         "lookup")
-        self.assertEqual(xml.get("ip"),   IP)
-        self.assertEqual(xml.get("type"), "19")
+        self.assertEqual(xml.tag,             "lookup")
+        self.assertEqual(xml.get("ip"),       IP)
+        self.assertEqual(xml.get("type"),     "19")
+        self.assertEqual(xml.get("listed"),   "1")
+        self.assertEqual(xml.get("own", "0"), "0")
 
     def test_ip_without_type(self):
         out = make.lookup(IP)
         xml = _xml(out)
 
-        self.assertEqual(xml.tag,         "lookup")
-        self.assertEqual(xml.get("ip"),   IP)
-        self.assertEqual(xml.get("type"), None)
+        self.assertEqual(xml.tag,             "lookup")
+        self.assertEqual(xml.get("ip"),       IP)
+        self.assertEqual(xml.get("type"),     None)
+        self.assertEqual(xml.get("listed"),   "1")
+        self.assertEqual(xml.get("own", "0"), "0")
 
     def test_id_with_type(self):
         out = make.lookup(ID, 19)
         xml = _xml(out)
 
-        self.assertEqual(xml.tag,         "lookup")
-        self.assertEqual(xml.get("id"),   str(ID))
-        self.assertEqual(xml.get("type"), "19")
+        self.assertEqual(xml.tag,             "lookup")
+        self.assertEqual(xml.get("id"),       str(ID))
+        self.assertEqual(xml.get("type"),     "19")
+        self.assertEqual(xml.get("listed"),   "1")
+        self.assertEqual(xml.get("own", "0"), "0")
+
 
     def test_id_without_type(self):
         out = make.lookup(ID)
         xml = _xml(out)
 
-        self.assertEqual(xml.tag,         "lookup")
-        self.assertEqual(xml.get("id"),   str(ID))
-        self.assertEqual(xml.get("type"), None)
+        self.assertEqual(xml.tag,             "lookup")
+        self.assertEqual(xml.get("id"),       str(ID))
+        self.assertEqual(xml.get("type"),     None)
+        self.assertEqual(xml.get("listed"),   "1")
+        self.assertEqual(xml.get("own", "0"), "0")
 
 class MakeTestRemove(unittest.TestCase):
     def test(self):

@@ -2,10 +2,10 @@ from typing    import List, Optional, Tuple
 from xml.etree import ElementTree as et
 from .struct   import Lookup
 
-def _xml(s: str) -> List[et.Element]:
+def _xml(s: bytes) -> List[et.Element]:
     return list(et.fromstring(s.strip()))
 
-def add(data: str) -> Tuple[Optional[int], str]:
+def add(data: bytes) -> Tuple[Optional[int], str]:
     responses = _xml(data)
     id: Optional[int] = None
     if responses[0].tag == "success":
@@ -14,7 +14,7 @@ def add(data: str) -> Tuple[Optional[int], str]:
         id, responses[0].get("data", "")
     )
 
-def lookup(data: str) -> Optional[Lookup]:
+def lookup(data: bytes) -> Optional[Lookup]:
     responses = _xml(data)
     if (not responses or
             not responses[0].tag == "result"):
@@ -31,7 +31,7 @@ def lookup(data: str) -> Optional[Lookup]:
             int(response.get("timestamp", ""))
         )
 
-def remove(data: str) -> Tuple[bool, str]:
+def remove(data: bytes) -> Tuple[bool, str]:
     responses = _xml(data)
     return (
         responses[0].tag == "success",

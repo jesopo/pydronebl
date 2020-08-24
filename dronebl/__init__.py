@@ -15,14 +15,12 @@ class BaseDroneBL(object):
 
 class DroneBL(BaseDroneBL):
     def _post(self,
-            method: str
-            ) -> str:
+            method: bytes
+            ) -> bytes:
         data     = make.request(self._key, method)
-        request  = urllib.request.Request(
-            URL, data.encode("utf8"), HEADERS, method="POST"
-        )
+        request  = urllib.request.Request(URL, data, HEADERS, method="POST")
         response = urllib.request.urlopen(request, timeout=5)
-        return response.read().decode("utf8")
+        return response.read()
 
     def lookup(self,
             query: Union[str, int],
@@ -51,16 +49,12 @@ class DroneBL(BaseDroneBL):
 
 class AsyncDroneBL(BaseDroneBL):
     async def _post(self,
-            method: str
-            ) -> str:
+            method: bytes
+            ) -> bytes:
         data = make.request(self._key, method)
         async with AsyncClient() as client:
-            response = await client.post(
-                URL,
-                data    = data.encode("utf8"),
-                headers = HEADERS
-            )
-        return response.content.decode("utf8")
+            response = await client.post(URL, data=data, headers=HEADERS)
+        return response.content
 
     async def lookup(self,
             query: Union[str, int],

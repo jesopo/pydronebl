@@ -1,53 +1,55 @@
-from typing import Optional, Union
+from typing    import Optional, Union
+from xml.etree import ElementTree as et
 
-ENVELOPE = \
-    '<?xml version="1.0"?><request key="{key}">{method}</request>'
-M_ADD = \
-    '<add ip="{ip}" type="{type}" comment="{comment}" />'
-M_ADD_PORT = \
-    '<add ip="{ip}" type="{type}" comment="{comment}" port="{port}" />'
-M_LOOKUP = \
-    '<lookup {query_k}="{query_v}" listed="1" limit="1" />'
-M_LOOKUP_TYPE = \
-    '<lookup {query_k}="{query_v}" listed="1" limit="1" type="{type}" />'
-M_REMOVE = \
-    '<remove id="{id}" />'
+ENVELOPE = b'<?xml version="1.0"?><request key="%b">%b</request>'
 
 def request(
-        key: str,
-        method: str
-        ) -> str:
-    return ENVELOPE.format(key=key, method=method)
+        key:    str,
+        method: bytes
+        ) -> bytes:
+    return ENVELOPE % (key, method)
 
 def lookup(
         query: Union[str, int],
-        type:  Optional[int]=None
-        ) -> str:
+        type:  Optional[int]=None,
+        limit: Optional[int]=None
+        ) -> bytes:
+    # 1000 is default, as per docs
+    limit_n = 1000
+    if limit is not None:
+        limit_n = limit
+
+    element = et.Element("lookup", {
+        "limit":  str(limit),
+        "listed": "1"
+    })
+
     if isinstance(query, int):
-        query_k = "id"
-        query_v = str(query)
+        element.set("id", str(query))
     else:
-        query_k = "ip"
-        query_v = query
+        element.set("ip", query)
 
     if type is not None:
-        method = M_LOOKUP_TYPE
-    else:
-        method = M_LOOKUP
-    return method.format(query_k=query_k, query_v=query_v, type=type)
+        element.set("type", str(type))
+    return et.tostring(element)
 
 def add(
         ip:      str,
         type:    int,
         comment: str,
         port:    Optional[int]=None
-        ) -> str:
-
+        ) -> bytes:
+    element = et.Element("add", {
+        "ip":      ip,
+        "type":    str(type),
+        "comment": comment
+    });
     if port is not None:
-        method = M_ADD_PORT
-    else:
-        method = M_ADD
-    return method.format(ip=ip, type=type, comment=comment, port=port)
+        element.set("port", str(port))
+    return et.tostring(element)
 
-def remove(id: int) -> str:
-    return M_REMOVE.format(id=id)
+def remove(id: int) -> bytes:
+    element = et.Element("remove", {
+        "id": str(id)
+    })
+    return et.tostring(element)

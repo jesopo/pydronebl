@@ -54,7 +54,9 @@ class AsyncDroneBL(BaseDroneBL):
             ) -> bytes:
         data = make.request(self._key, method)
         async with AsyncClient() as client:
-            response = await client.post(URL, data=data, headers=HEADERS)
+            response = await client.post(
+                URL, data=data, headers=HEADERS, timeout=5
+            )
         return response.content
 
     async def lookup(self,

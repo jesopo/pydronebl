@@ -14,13 +14,7 @@ def lookup(
         type:  Optional[int]=None,
         limit: Optional[int]=None
         ) -> bytes:
-    # 1000 is default, as per docs
-    limit_n = 1000
-    if limit is not None:
-        limit_n = limit
-
     element = et.Element("lookup", {
-        "limit":  str(limit),
         "listed": "1"
     })
 
@@ -31,6 +25,10 @@ def lookup(
 
     if type is not None:
         element.set("type", str(type))
+
+    if limit is not None:
+        element.set("limit", str(limit))
+
     return et.tostring(element)
 
 def add(

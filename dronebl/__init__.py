@@ -24,9 +24,10 @@ class DroneBL(BaseDroneBL):
 
     def lookup(self,
             query: Union[str, int],
-            type:  Optional[int]=None
+            type:  Optional[int]=None,
+            limit: Optional[int]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type)
+        method    = make.lookup(query, type, limit)
         responses = self._post(method)
         return parse.lookup(responses)
 
@@ -58,9 +59,10 @@ class AsyncDroneBL(BaseDroneBL):
 
     async def lookup(self,
             query: Union[str, int],
-            type:  Optional[int]=None
+            type:  Optional[int]=None,
+            limit: Optional[int]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type)
+        method    = make.lookup(query, type, limit)
         responses = await self._post(method)
         return parse.lookup(responses)
 

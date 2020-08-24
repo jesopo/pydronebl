@@ -13,7 +13,7 @@ def _rand(i: int=16) -> str:
 
 class ParseTestLookup(unittest.TestCase):
     def test_not_found(self):
-        out = parse.lookup( """
+        out = parse.lookup("""
             <?xml version="1.0"?>
             <response type="success" />
         """)

@@ -57,9 +57,8 @@ def batch(
     outs: List[Tuple[str, Union[bool, Optional[int]], str]] = []
 
     j = 0
-    for i in range(len(responses)):
+    for response in responses:
         action, ident = actions[j]
-        response      = responses[i]
 
         if ((action == "add" and response.get("ip") == ident) or
                 (action == "remove" and response.get("id") == ident) or

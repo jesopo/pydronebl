@@ -45,6 +45,15 @@ class MakeTestAdd(unittest.TestCase):
         self.assertEqual(xml.get("type"),    "19")
         self.assertEqual(xml.get("comment"), "abused vpn")
 
+class MakeTestUpdate(unittest.TestCase):
+    def test(self):
+        out = make.update(ID, "abused vpn")
+        xml = _xml(out)
+
+        self.assertEqual(xml.tag,            "update")
+        self.assertEqual(xml.get("id"),      str(ID))
+        self.assertEqual(xml.get("comment"), "abused vpn")
+
 class MakeTestLookup(unittest.TestCase):
     def test_ip_with_type(self):
         out = make.lookup(IP, 19)

@@ -46,6 +46,14 @@ class DroneBL(BaseDroneBL):
         responses = self._post(method)
         return parse.add(responses)
 
+    def update(self,
+            id:      int,
+            comment: str
+            ) -> Tuple[bool, str]:
+        method    = make.update(id, comment)
+        responses = self._post(method)
+        return parse.update(responses)
+
     def remove(self,
             id: int
             ) -> Tuple[bool, str]:
@@ -91,6 +99,14 @@ class AsyncDroneBL(BaseDroneBL):
         method    = make.add(ip, type, comment, port)
         responses = await self._post(method)
         return parse.add(responses)
+
+    async def update(self,
+            id:      int,
+            comment: str
+            ) -> Tuple[bool, str]:
+        method    = make.update(id, comment)
+        responses = await self._post(method)
+        return parse.update(responses)
 
     async def remove(self,
             id: int

@@ -42,6 +42,14 @@ The RPC key, IP and ID below are fake.
 (3174874, 'Added 198.51.100.123')
 ```
 
+### Updating a comment
+```python
+>>> d.update(3174874, "abused VPN")
+(True, 'Updated 3174874')
+>>> d.update(3174875, "abused VPN")
+(False, 'The id 3174875 does not exist')
+```
+
 ### Removing an IP
 ```python
 >>> d.remove(3174874)
@@ -53,16 +61,18 @@ The RPC key, IP and ID below are fake.
 ### Batches
 ```python
 >>> b = d.batch()
+>>> b.remove(3174872)
+>>> b.update(3174873, "abused VPN")
 >>> b.add("198.51.100.123", 19, "abused VPN (connect verified)")
 >>> b.add("198.51.100.124", 13, "ssh bruteforce")
->>> b.remove(3174873)
 >>> r = d.commit(b)
 >>> for res in r:
 ...     print(res)
 ...
+('remove', True, 'Removed 3174872')
+('update', True, 'Updated 3174873')
 ('add', 3174874, 'Added 198.51.100.123')
 ('add', 3174875, 'Added 198.51.100.124')
-('remove', True, 'Removed 3174873')
 >>> b = d.type_batch(19)
 >>> b.add("198.51.100.125", "abused VPN (connect verified)")
 >>> d.commit(b)

@@ -14,6 +14,15 @@ def add(data: bytes) -> Tuple[Optional[int], str]:
     responses = _xml(data)
     return _add(responses[0])
 
+def _update(response: et.Element) -> Tuple[bool, str]:
+    return (
+        response.tag == "success",
+        response.get("data", "")
+    )
+def update(data: bytes) -> Tuple[bool, str]:
+    responses = _xml(data)
+    return _update(responses[0])
+
 def lookup(data: bytes) -> List[Lookup]:
     responses = _xml(data)
     lookups: List[Lookup] = []
@@ -53,12 +62,16 @@ def batch(
         response      = responses[i]
 
         if ((action == "add" and response.get("ip") == ident) or
-                (action == "remove" and response.get("id") == ident)):
+                (action == "remove" and response.get("id") == ident) or
+                (action == "update" and response.get("id") == ident)):
             j += 1
             if   action == "add":
                 id, msg  = _add(response)
                 outs.append((action, id,  msg))
             elif action == "remove":
                 suc, msg = _remove(response)
+                outs.append((action, suc, msg))
+            elif action == "update":
+                suc, msg = _update(response)
                 outs.append((action, suc, msg))
     return outs

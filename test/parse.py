@@ -70,6 +70,27 @@ class ParseTestAdd(unittest.TestCase):
 
         self.assertEqual(out, (None, data))
 
+class ParseTestUpdate(unittest.TestCase):
+    def test_success(self):
+        data = _rand()
+        out  = parse.update(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <success id="{ID}" data="{data}" />
+            </response>
+        """.encode("utf8"))
+        self.assertEqual(out, (True, data))
+
+    def test_failure(self):
+        data = _rand()
+        out  = parse.update(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <warning id="{ID}" data="{data}" />
+            </response>
+        """.encode("utf8"))
+        self.assertEqual(out, (False, data))
+
 class ParseTestRemove(unittest.TestCase):
     def test_success(self):
         data = _rand()

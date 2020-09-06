@@ -47,6 +47,16 @@ def add(
         element.set("port", str(port))
     return et.tostring(element)
 
+def update(
+        id:      int,
+        comment: str
+        ) -> bytes:
+    element = et.Element("update", {
+        "id":      str(id),
+        "comment": comment
+    })
+    return et.tostring(element)
+
 def remove(id: int) -> bytes:
     element = et.Element("remove", {
         "id": str(id)
@@ -68,6 +78,12 @@ class BaseBatch(object):
     def remove(self, id: int):
         self._actions.append(("remove", str(id)))
         self._data += remove(id)
+
+    def update(self,
+            id:      int,
+            comment: str):
+        self._actions.append(("update", str(id)))
+        self._data += update(id, comment)
 
 class Batch(BaseBatch):
     def add(self,

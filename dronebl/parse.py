@@ -18,16 +18,17 @@ def lookup(data: bytes) -> List[Lookup]:
     responses = _xml(data)
     lookups: List[Lookup] = []
     for response in responses:
-        port   = response.get("port", "")
-        lookup = Lookup(
-            response.get("ip", ""),
-            int(response.get("id", "")),
-            int(response.get("type", "")),
-            response.get("comment", ""),
-            None if port == "" else int(port),
-            int(response.get("timestamp", ""))
-        )
-        lookups.append(lookup)
+        if response.tag == "result":
+            port   = response.get("port", "")
+            lookup = Lookup(
+                response.get("ip", ""),
+                int(response.get("id", "")),
+                int(response.get("type", "")),
+                response.get("comment", ""),
+                None if port == "" else int(port),
+                int(response.get("timestamp", ""))
+            )
+            lookups.append(lookup)
     return lookups
 
 def _remove(response: et.Element) -> Tuple[bool, str]:

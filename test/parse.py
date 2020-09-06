@@ -38,6 +38,15 @@ class ParseTestLookup(unittest.TestCase):
         self.assertEqual(out.comment,  data)
         self.assertEqual(out.datetime, now)
 
+    def test_invalid(self):
+        outs = parse.lookup(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <warning ip="{IP}" data="{IP} is not a valid IPv4/IPv6 address or cidr." />
+            </response>
+        """.encode("utf8"))
+        self.assertEqual(outs, [])
+
 class ParseTestAdd(unittest.TestCase):
     def test_success(self):
         data = _rand()

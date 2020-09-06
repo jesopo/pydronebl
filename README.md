@@ -42,7 +42,7 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 
 ### Adding multiple IPs
 ```python
->>> d.add(["198.51.100.123", "198.51.100.124"], 19, "abused VPN (connect verified)")
+>>> d.add_many(["198.51.100.123", "198.51.100.124"], 19, "abused VPN (connect verified)")
 [(3174874, 'Added 198.51.100.123'), (3174875, 'Added 198.51.100.124')]
 ```
 

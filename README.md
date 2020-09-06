@@ -40,18 +40,27 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 (3174874, 'Added 198.51.100.123')
 ```
 
-### Adding multiple IPs
-```python
->>> d.add_many(["198.51.100.123", "198.51.100.124"], 19, "abused VPN (connect verified)")
-[(3174874, 'Added 198.51.100.123'), (3174875, 'Added 198.51.100.124')]
-```
-
 ### Removing an IP
 ```python
 >>> d.remove(3174874)
 (True, 'Removed 3174874')
 >>> d.remove(3174874)
 (False, '3174874 already delisted')
+```
+
+### Batches
+```python
+>>> b = d.batch()
+>>> b.add("198.51.100.123", 19, "abused VPN (connect verified)")
+>>> b.add("198.51.100.124", 13, "ssh bruteforce")
+>>> b.remove(3174873)
+>>> r = d.commit(b)
+>>> for res in r:
+...     print(res)
+...
+('add', 3174874, 'Added 198.51.100.123')
+('add', 3174875, 'Added 198.51.100.124')
+('remove', True, 'Removed 3174873')
 ```
 
 ### Asyncified!

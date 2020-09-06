@@ -4,10 +4,10 @@ from xml.etree import ElementTree as et
 ENVELOPE = b'<?xml version="1.0"?><request key="%b">%b</request>'
 
 def request(
-        key:    str,
+        key:    bytes,
         method: bytes
         ) -> bytes:
-    return ENVELOPE % (key.encode("ascii"), method)
+    return ENVELOPE % (key, method)
 
 def lookup(
         query: Union[str, int],
@@ -32,31 +32,60 @@ def lookup(
     return et.tostring(element)
 
 def add(
-        ip:      Union[str, List[str]],
+        ip:      str,
         type:    int,
         comment: str,
         port:    Optional[int]=None
         ) -> bytes:
 
-    if isinstance(ip, str):
-        ip_list = [ip]
-    else:
-        ip_list = ip
-
-    out = b""
-    for ip in ip_list:
-        element = et.Element("add", {
-            "ip":      ip,
-            "type":    str(type),
-            "comment": comment
-        });
-        if port is not None:
-            element.set("port", str(port))
-        out += et.tostring(element)
-    return out
+    element = et.Element("add", {
+        "ip":      ip,
+        "type":    str(type),
+        "comment": comment
+    });
+    if port is not None:
+        element.set("port", str(port))
+    return et.tostring(element)
 
 def remove(id: int) -> bytes:
     element = et.Element("remove", {
         "id": str(id)
     })
     return et.tostring(element)
+
+class BaseBatch(object):
+    def __init__(self):
+        self._actions: List[Tuple[str, str]] = []
+        self._data = b""
+
+    @property
+    def actions(self):
+        return self._actions
+    @property
+    def data(self):
+        return self._data
+
+    def remove(self, id: int):
+        self._actions.append(("remove", str(id)))
+        self._data += remove(id)
+
+class Batch(BaseBatch):
+    def add(self,
+            ip:      str,
+            type:    int,
+            comment: str,
+            port:    Optional[int]=None):
+        self._actions.append(("add", ip))
+        self._data += add(ip, type, comment, port)
+
+class TypeBatch(BaseBatch):
+    def __init__(self, type: int):
+        self._type = type
+        super().__init__()
+
+    def add(self,
+            ip:      str,
+            comment: str,
+            port:    Optional[int]=None):
+        self._actions.append(("add", ip))
+        self._data += add(ip, self._type, comment, port)

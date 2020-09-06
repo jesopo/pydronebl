@@ -11,7 +11,12 @@ HEADERS = {"Content-Type": "text/xml"}
 
 class BaseDroneBL(object):
     def __init__(self, key: str):
-        self._key = key
+        self._key = key.encode("ascii")
+
+    def batch(self) -> make.Batch:
+        return make.Batch()
+    def type_batch(self, type: int) -> make.TypeBatch:
+        return make.TypeBatch(type)
 
 class DroneBL(BaseDroneBL):
     def _post(self,
@@ -31,22 +36,15 @@ class DroneBL(BaseDroneBL):
         responses = self._post(method)
         return parse.lookup(responses)
 
-    def add_many(self,
-            ips:     List[str],
-            type:    int,
-            comment: str,
-            port:    Optional[int]=None
-            ) -> List[Tuple[Optional[int], str]]:
-        method    = make.add(ips, type, comment, port)
-        responses = self._post(method)
-        return parse.add(responses)
     def add(self,
             ip:      str,
             type:    int,
             comment: str,
             port:    Optional[int]=None
             ) -> Tuple[Optional[int], str]:
-        return self.add_many([ip], type, comment, port)[0]
+        method    = make.add(ip, type, comment, port)
+        responses = self._post(method)
+        return parse.add(responses)
 
     def remove(self,
             id: int
@@ -54,6 +52,15 @@ class DroneBL(BaseDroneBL):
         method    = make.remove(id)
         responses = self._post(method)
         return parse.remove(responses)
+
+    def commit(self,
+            batch: make.Batch
+            ) -> List[Tuple[str, Union[bool, Optional[int]], str]]:
+        if batch.data:
+            responses = self._post(batch.data)
+            return parse.batch(responses, batch.actions)
+        else:
+            return []
 
 class AsyncDroneBL(BaseDroneBL):
     async def _post(self,
@@ -75,22 +82,15 @@ class AsyncDroneBL(BaseDroneBL):
         responses = await self._post(method)
         return parse.lookup(responses)
 
-    async def add_many(self,
-            ips:     List[str],
-            type:    int,
-            comment: str,
-            port:    Optional[int]=None
-            ) -> List[Tuple[Optional[int], str]]:
-        method    = make.add(ips, type, comment, port)
-        responses = await self._post(method)
-        return parse.add(responses)
     async def add(self,
             ip:      str,
             type:    int,
             comment: str,
             port:    Optional[int]=None
             ) -> Tuple[Optional[int], str]:
-        return (await self.add_many([ip], type, comment, port))[0]
+        method    = make.add(ip, type, comment, port)
+        responses = await self._post(method)
+        return parse.add(responses)
 
     async def remove(self,
             id: int
@@ -98,3 +98,12 @@ class AsyncDroneBL(BaseDroneBL):
         method    = make.remove(id)
         responses = await self._post(method)
         return parse.remove(responses)
+
+    async def commit(self,
+            batch: make.Batch
+            ) -> List[Tuple[str, Union[bool, Optional[int]], str]]:
+        if batch.data:
+            responses = await self._post(batch.data)
+            return parse.batch(responses, batch.actions)
+        else:
+            return []

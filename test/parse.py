@@ -13,7 +13,7 @@ def _rand(i: int=16) -> str:
 
 class ParseTestLookup(unittest.TestCase):
     def test_not_found(self):
-        out = parse.lookup("""
+        out = parse.lookup(b"""
             <?xml version="1.0"?>
             <response type="success" />
         """)
@@ -28,7 +28,7 @@ class ParseTestLookup(unittest.TestCase):
             <response type="success">
                 <result ip="{IP}" type="19" comment="{data}" id="{ID}" listed="1" timestamp="{ts}" />
             </response>
-        """)
+        """.encode("utf8"))
 
         self.assertEqual(len(outs),    1)
         out  = outs[0]
@@ -39,30 +39,16 @@ class ParseTestLookup(unittest.TestCase):
         self.assertEqual(out.datetime, now)
 
 class ParseTestAdd(unittest.TestCase):
-    def test_success_one(self):
+    def test_success(self):
         data = _rand()
         out  = parse.add(f"""
             <?xml version="1.0"?>
             <response type="success">
                 <success ip="{IP}" id="{ID}" data="{data}" />
             </response>
-        """)
+        """.encode("utf8"))
 
-        self.assertEqual(len(out), 1)
-        self.assertEqual(out[0],   (ID, data))
-    def test_success_many(self):
-        data = _rand()
-        out  = parse.add(f"""
-            <?xml version="1.0"?>
-            <response type="success">
-                <success ip="{IP}" id="{ID}" data="{data}" />
-                <success ip="{IP}" id="{ID}" data="{data}" />
-            </response>
-        """)
-
-        self.assertEqual(len(out), 2)
-        self.assertEqual(out[0],   (ID, data))
-        self.assertEqual(out[0],   out[1])
+        self.assertEqual(out, (ID, data))
 
     def test_failure(self):
         data = _rand()
@@ -71,23 +57,9 @@ class ParseTestAdd(unittest.TestCase):
             <response type="success">
                 <warning ip="{IP}" data="{data}" />
             </response>
-        """)
+        """.encode("utf8"))
 
-        self.assertEqual(len(out), 1)
-        self.assertEqual(out[0],   (None, data))
-    def test_failure(self):
-        data = _rand()
-        out  = parse.add(f"""
-            <?xml version="1.0"?>
-            <response type="success">
-                <warning ip="{IP}" data="{data}" />
-                <warning ip="{IP}" data="{data}" />
-            </response>
-        """)
-
-        self.assertEqual(len(out), 2)
-        self.assertEqual(out[0],   (None, data))
-        self.assertEqual(out[0],   out[1])
+        self.assertEqual(out, (None, data))
 
 class ParseTestRemove(unittest.TestCase):
     def test_success(self):
@@ -97,7 +69,7 @@ class ParseTestRemove(unittest.TestCase):
             <response type="success">
                 <success id="{ID}" data="{data}" />
             </response>
-        """)
+        """.encode("utf8"))
 
         self.assertEqual(out, (True, data))
 
@@ -108,7 +80,38 @@ class ParseTestRemove(unittest.TestCase):
             <response type="success">
                 <warning id="{ID}" data="{data}" />
             </response>
-        """)
+        """.encode("utf8"))
 
         self.assertEqual(out, (False, data))
 
+class ParseTestBatch(unittest.TestCase):
+    def test(self):
+        data = _rand()
+        acts = [("add", IP), ("remove", str(ID))]
+        out  = parse.batch(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <success ip="{IP}" id="{ID}" data="{data}" />
+                <success id="{ID}" data="{data}" />
+            </response>
+        """.encode("utf8"), acts)
+
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[0],   ("add",    ID, data))
+        self.assertEqual(out[1],   ("remove", True, data))
+
+    def test_junk(self):
+        data = _rand()
+        acts = [("add", IP), ("remove", str(ID))]
+        out  = parse.batch(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <success ip="{IP}" id="{ID}" data="{data}" />
+                <warning />
+                <success id="{ID}" data="{data}" />
+            </response>
+        """.encode("utf8"), acts)
+
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[0],   ("add",    ID, data))
+        self.assertEqual(out[1],   ("remove", True, data))

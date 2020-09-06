@@ -45,6 +45,21 @@ class MakeTestAdd(unittest.TestCase):
         self.assertEqual(xml.get("type"),    "19")
         self.assertEqual(xml.get("comment"), "abused vpn")
 
+    def test_many(self):
+        out = make.add([IP, IP], 19, "abused vpn", 1337)
+        xml = _xml(make.request("", out))
+
+        self.assertEqual(xml[0].tag,            "add")
+        self.assertEqual(xml[0].get("ip"),      IP)
+        self.assertEqual(xml[0].get("port"),    "1337")
+        self.assertEqual(xml[0].get("type"),    "19")
+        self.assertEqual(xml[0].get("comment"), "abused vpn")
+
+        self.assertEqual(xml[0].get("ip"),      xml[1].get("ip"))
+        self.assertEqual(xml[0].get("port"),    xml[1].get("port"))
+        self.assertEqual(xml[0].get("type"),    xml[1].get("type"))
+        self.assertEqual(xml[0].get("comment"), xml[1].get("comment"))
+
 class MakeTestLookup(unittest.TestCase):
     def test_ip_with_type(self):
         out = make.lookup(IP, 19)

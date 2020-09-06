@@ -1,4 +1,4 @@
-from typing    import Optional, Union
+from typing    import List, Optional, Union
 from xml.etree import ElementTree as et
 
 ENVELOPE = b'<?xml version="1.0"?><request key="%b">%b</request>'
@@ -32,19 +32,28 @@ def lookup(
     return et.tostring(element)
 
 def add(
-        ip:      str,
+        ip:      Union[str, List[str]],
         type:    int,
         comment: str,
         port:    Optional[int]=None
         ) -> bytes:
-    element = et.Element("add", {
-        "ip":      ip,
-        "type":    str(type),
-        "comment": comment
-    });
-    if port is not None:
-        element.set("port", str(port))
-    return et.tostring(element)
+
+    if isinstance(ip, str):
+        ip_list = [ip]
+    else:
+        ip_list = ip
+
+    out = b""
+    for ip in ip_list:
+        element = et.Element("add", {
+            "ip":      ip,
+            "type":    str(type),
+            "comment": comment
+        });
+        if port is not None:
+            element.set("port", str(port))
+        out += et.tostring(element)
+    return out
 
 def remove(id: int) -> bytes:
     element = et.Element("remove", {

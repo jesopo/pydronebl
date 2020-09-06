@@ -31,15 +31,22 @@ class DroneBL(BaseDroneBL):
         responses = self._post(method)
         return parse.lookup(responses)
 
+    def add_many(self,
+            ips:     List[str],
+            type:    int,
+            comment: str,
+            port:    Optional[int]=None
+            ) -> List[Tuple[Optional[int], str]]:
+        method    = make.add(ips, type, comment, port)
+        responses = self._post(method)
+        return parse.add(responses)
     def add(self,
             ip:      str,
             type:    int,
             comment: str,
             port:    Optional[int]=None
             ) -> Tuple[Optional[int], str]:
-        method    = make.add(ip, type, comment, port)
-        responses = self._post(method)
-        return parse.add(responses)
+        return self.add_many([ip], type, comment, port)[0]
 
     def remove(self,
             id: int
@@ -68,15 +75,22 @@ class AsyncDroneBL(BaseDroneBL):
         responses = await self._post(method)
         return parse.lookup(responses)
 
+    async def add_many(self,
+            ips:     List[str],
+            type:    int,
+            comment: str,
+            port:    Optional[int]=None
+            ) -> List[Tuple[Optional[int], str]]:
+        method    = make.add(ips, type, comment, port)
+        responses = await self._post(method)
+        return parse.add(responses)
     async def add(self,
             ip:      str,
             type:    int,
             comment: str,
             port:    Optional[int]=None
             ) -> Tuple[Optional[int], str]:
-        method    = make.add(ip, type, comment, port)
-        responses = await self._post(method)
-        return parse.add(responses)
+        return (await self.add_many([ip], type, comment, port))[0]
 
     async def remove(self,
             id: int

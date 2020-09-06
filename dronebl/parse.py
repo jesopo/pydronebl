@@ -5,14 +5,16 @@ from .struct   import Lookup
 def _xml(s: bytes) -> List[et.Element]:
     return list(et.fromstring(s.strip()))
 
-def add(data: bytes) -> Tuple[Optional[int], str]:
+def add(data: bytes) -> List[Tuple[Optional[int], str]]:
     responses = _xml(data)
-    id: Optional[int] = None
-    if responses[0].tag == "success":
-        id = int(responses[0].get("id", ""))
-    return (
-        id, responses[0].get("data", "")
-    )
+    out: List[Tuple[Optional[int], str]] = []
+
+    for response in responses:
+        id: Optional[int] = None
+        if response.tag == "success":
+            id = int(response.get("id", ""))
+        out.append((id, response.get("data", "")))
+    return out
 
 def lookup(data: bytes) -> List[Lookup]:
     responses = _xml(data)

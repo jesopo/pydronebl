@@ -39,7 +39,7 @@ class ParseTestLookup(unittest.TestCase):
         self.assertEqual(out.datetime, now)
 
 class ParseTestAdd(unittest.TestCase):
-    def test_success(self):
+    def test_success_one(self):
         data = _rand()
         out  = parse.add(f"""
             <?xml version="1.0"?>
@@ -48,7 +48,21 @@ class ParseTestAdd(unittest.TestCase):
             </response>
         """)
 
-        self.assertEqual(out, (ID, data))
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0],   (ID, data))
+    def test_success_many(self):
+        data = _rand()
+        out  = parse.add(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <success ip="{IP}" id="{ID}" data="{data}" />
+                <success ip="{IP}" id="{ID}" data="{data}" />
+            </response>
+        """)
+
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[0],   (ID, data))
+        self.assertEqual(out[0],   out[1])
 
     def test_failure(self):
         data = _rand()
@@ -59,7 +73,21 @@ class ParseTestAdd(unittest.TestCase):
             </response>
         """)
 
-        self.assertEqual(out, (None, data))
+        self.assertEqual(len(out), 1)
+        self.assertEqual(out[0],   (None, data))
+    def test_failure(self):
+        data = _rand()
+        out  = parse.add(f"""
+            <?xml version="1.0"?>
+            <response type="success">
+                <warning ip="{IP}" data="{data}" />
+                <warning ip="{IP}" data="{data}" />
+            </response>
+        """)
+
+        self.assertEqual(len(out), 2)
+        self.assertEqual(out[0],   (None, data))
+        self.assertEqual(out[0],   out[1])
 
 class ParseTestRemove(unittest.TestCase):
     def test_success(self):

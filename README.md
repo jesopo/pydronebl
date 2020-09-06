@@ -61,6 +61,10 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 ('add', 3174874, 'Added 198.51.100.123')
 ('add', 3174875, 'Added 198.51.100.124')
 ('remove', True, 'Removed 3174873')
+>>> b = d.type_batch(19)
+>>> b.add("198.51.100.125", "abused VPN (connect verified)")
+>>> d.commit(b)
+[('add', 3174876, 'Added 198.51.100.125')]
 ```
 
 ### Asyncified!

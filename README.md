@@ -34,6 +34,18 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 (None, 'You already reported 198.51.100.123 as type 19')
 ```
 
+### Adding with a port
+```python
+>>> d.add("198.51.100.123", 19, "abused VPN (connect verified)", 1337)
+(3174874, 'Added 198.51.100.123')
+```
+
+### Adding multiple IPs
+```python
+>>> d.add(["198.51.100.123", "198.51.100.124"], 19, "abused VPN (connect verified)")
+[(3174874, 'Added 198.51.100.123'), (3174875, 'Added 198.51.100.124')]
+```
+
 ### Removing an IP
 ```python
 >>> d.remove(3174874)

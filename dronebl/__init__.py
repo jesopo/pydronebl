@@ -10,8 +10,11 @@ URL     = "https://dronebl.org/RPC2"
 HEADERS = {"Content-Type": "text/xml"}
 
 class BaseDroneBL(object):
-    def __init__(self, key: str):
-        self._key = key.encode("ascii")
+    def __init__(self,
+            key:     str,
+            timeout: float = 5.0):
+        self._key     = key.encode("ascii")
+        self._timeout = timeout
 
     def batch(self) -> make.Batch:
         return make.Batch()
@@ -24,7 +27,7 @@ class DroneBL(BaseDroneBL):
             ) -> bytes:
         data     = make.request(self._key, method)
         request  = urllib.request.Request(URL, data, HEADERS, method="POST")
-        response = urllib.request.urlopen(request, timeout=5)
+        response = urllib.request.urlopen(request, timeout=self._timeout)
         return response.read()
 
     def lookup(self,
@@ -77,7 +80,7 @@ class AsyncDroneBL(BaseDroneBL):
         data = make.request(self._key, method)
         async with AsyncClient() as client:
             response = await client.post(
-                URL, data=data, headers=HEADERS, timeout=5
+                URL, data=data, headers=HEADERS, timeout=self._timeout
             )
         return response.content
 

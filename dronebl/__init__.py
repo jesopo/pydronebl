@@ -12,7 +12,7 @@ HEADERS = {"Content-Type": "text/xml"}
 class BaseDroneBL(object):
     def __init__(self,
             key:     str,
-            timeout: float = 5.0):
+            timeout: float = 10.0):
         self._key     = key.encode("ascii")
         self._timeout = timeout
 

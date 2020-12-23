@@ -12,9 +12,11 @@ HEADERS = {"Content-Type": "text/xml"}
 class BaseDroneBL(object):
     def __init__(self,
             key:     str,
-            timeout: float = 10.0):
+            timeout: float = 10.0,
+            xmlrpc2: str   = URL):
         self._key     = key.encode("ascii")
         self._timeout = timeout
+        self._xmlrpc2 = xmlrpc2
 
     def batch(self) -> make.Batch:
         return make.Batch()
@@ -26,7 +28,12 @@ class DroneBL(BaseDroneBL):
             method: bytes
             ) -> bytes:
         data     = make.request(self._key, method)
-        request  = urllib.request.Request(URL, data, HEADERS, method="POST")
+        request  = urllib.request.Request(
+            self._xmlrpc2,
+            data,
+            HEADERS,
+            method="POST"
+        )
         response = urllib.request.urlopen(request, timeout=self._timeout)
         return response.read()
 
@@ -80,7 +87,10 @@ class AsyncDroneBL(BaseDroneBL):
         data = make.request(self._key, method)
         async with AsyncClient() as client:
             response = await client.post(
-                URL, data=data, headers=HEADERS, timeout=self._timeout
+                self._xmlrpc2,
+                data=data,
+                headers=HEADERS,
+                timeout=self._timeout
             )
         return response.content
 

@@ -10,12 +10,14 @@ def request(
     return ENVELOPE % (key, method)
 
 def lookup(
-        query: Union[str, int],
-        type:  Optional[int]=None,
-        limit: Optional[int]=None
+        query:  Union[str, int],
+        type:   Optional[int]=None,
+        limit:  Optional[int]=None,
+        listed: Optional[int]=1
         ) -> bytes:
+
     element = et.Element("lookup", {
-        "listed": "1"
+        "listed": str(listed)
     })
 
     if isinstance(query, int):

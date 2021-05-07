@@ -17,14 +17,14 @@ def lookup(
         ) -> bytes:
 
     if listed == True:
-        listed = "1"
+        listedp = "1"
     elif listed == False:
-        listed = "0"
+        listedp = "0"
     else:
-        listed = "2"
+        listedp = "2"
 
     element = et.Element("lookup", {
-        "listed": str(listed)
+        "listed": str(listedp)
     })
 
     if isinstance(query, int):

@@ -24,7 +24,7 @@ def lookup(
         listed = "2"
 
     element = et.Element("lookup", {
-        "listed": listed
+        "listed": str(listed)
     })
 
     if isinstance(query, int):

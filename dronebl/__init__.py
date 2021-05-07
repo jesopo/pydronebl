@@ -41,7 +41,7 @@ class DroneBL(BaseDroneBL):
             query:  Union[str, int],
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
-            listed: Optional[int]=2
+            listed: Optional[bool]=None
             ) -> List[Lookup]:
         method    = make.lookup(query, type, limit, listed)
         responses = self._post(method)
@@ -99,7 +99,7 @@ class AsyncDroneBL(BaseDroneBL):
             query:  Union[str, int],
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
-            listed: Optional[int]=None
+            listed: Optional[bool]=None
             ) -> List[Lookup]:
         method    = make.lookup(query, type, limit, listed)
         responses = await self._post(method)

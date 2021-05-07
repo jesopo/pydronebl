@@ -13,11 +13,18 @@ def lookup(
         query:  Union[str, int],
         type:   Optional[int]=None,
         limit:  Optional[int]=None,
-        listed: Optional[int]=1
+        listed: Optional[bool]=None
         ) -> bytes:
 
+    if listed == True:
+        listed = "1"
+    elif listed == False:
+        listed = "0"
+    else:
+        listed = "2"
+
     element = et.Element("lookup", {
-        "listed": str(listed)
+        "listed": listed
     })
 
     if isinstance(query, int):

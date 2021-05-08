@@ -62,7 +62,7 @@ class MakeTestLookup(unittest.TestCase):
         self.assertEqual(xml.tag,                "lookup")
         self.assertEqual(xml.get("ip"),          IP)
         self.assertEqual(xml.get("type"),        "19")
-        self.assertEqual(xml.get("listed"),      "1")
+        self.assertEqual(xml.get("listed"),      "2")
         self.assertEqual(xml.get("own", "0"),    "0")
         self.assertEqual(xml.get("limit", None), None)
 

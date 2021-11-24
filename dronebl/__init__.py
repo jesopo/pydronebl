@@ -1,4 +1,5 @@
 import urllib.request
+from datetime  import datetime
 from typing    import List, Optional, Tuple, Union
 
 from httpx     import AsyncClient
@@ -41,9 +42,10 @@ class DroneBL(BaseDroneBL):
             query:  Union[str, int],
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
-            listed: Optional[bool]=None
+            listed: Optional[bool]=None,
+            stop:   Optional[datetime]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type, limit, listed)
+        method    = make.lookup(query, type, limit, listed, stop)
         responses = self._post(method)
         return parse.lookup(responses)
 
@@ -99,9 +101,10 @@ class AsyncDroneBL(BaseDroneBL):
             query:  Union[str, int],
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
-            listed: Optional[bool]=None
+            listed: Optional[bool]=None,
+            stop:   Optional[datetime]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type, limit, listed)
+        method    = make.lookup(query, type, limit, listed, stop)
         responses = await self._post(method)
         return parse.lookup(responses)
 

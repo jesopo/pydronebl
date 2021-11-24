@@ -15,7 +15,8 @@ def lookup(
         type:   Optional[int]=None,
         limit:  Optional[int]=None,
         listed: Optional[bool]=None,
-        stop:   Optional[datetime]=None
+        own:    bool=None,
+        stop:   Optional[datetime]=None,
         ) -> bytes:
 
     if listed == True:
@@ -42,6 +43,9 @@ def lookup(
 
     if stop is not None:
         element.set("stop", str(int(stop.timestamp())))
+
+    if own:
+        element.set("own", "1")
 
     return et.tostring(element)
 

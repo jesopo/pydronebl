@@ -66,6 +66,7 @@ class MakeTestLookup(unittest.TestCase):
         self.assertEqual(xml.get("listed"),      "2")
         self.assertEqual(xml.get("limit", None), None)
         self.assertEqual(xml.get("stop",  None), None)
+        self.assertEqual(xml.get("own",   None), None)
 
     def test_ip_without_type(self):
         out = make.lookup(IP)
@@ -96,6 +97,13 @@ class MakeTestLookup(unittest.TestCase):
     def test_stop(self):
         out = make.lookup(IP, stop=datetime(2021, 11, 24, 18, 36, 00))
         self.assertEqual(_xml(out).get("stop"), "1637778960")
+
+    def test_own(self):
+        out = make.lookup(IP, own=False)
+        self.assertEqual(_xml(out).get("own", None), None)
+
+        out = make.lookup(IP, own=True)
+        self.assertEqual(_xml(out).get("own", None), "1")
 
 class MakeTestRemove(unittest.TestCase):
     def test(self):

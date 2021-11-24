@@ -43,9 +43,10 @@ class DroneBL(BaseDroneBL):
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
             listed: Optional[bool]=None,
+            own:    bool=False,
             stop:   Optional[datetime]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type, limit, listed, stop)
+        method    = make.lookup(query, type, limit, listed, own, stop)
         responses = self._post(method)
         return parse.lookup(responses)
 
@@ -102,9 +103,10 @@ class AsyncDroneBL(BaseDroneBL):
             type:   Optional[int]=None,
             limit:  Optional[int]=None,
             listed: Optional[bool]=None,
+            own:    bool=False,
             stop:   Optional[datetime]=None
             ) -> List[Lookup]:
-        method    = make.lookup(query, type, limit, listed, stop)
+        method    = make.lookup(query, type, limit, listed, own, stop)
         responses = await self._post(method)
         return parse.lookup(responses)
 

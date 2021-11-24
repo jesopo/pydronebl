@@ -63,7 +63,6 @@ class MakeTestLookup(unittest.TestCase):
         self.assertEqual(xml.get("ip"),          IP)
         self.assertEqual(xml.get("type"),        "19")
         self.assertEqual(xml.get("listed"),      "2")
-        self.assertEqual(xml.get("own", "0"),    "0")
         self.assertEqual(xml.get("limit", None), None)
 
     def test_ip_without_type(self):
@@ -84,6 +83,13 @@ class MakeTestLookup(unittest.TestCase):
         xml = _xml(out)
 
         self.assertEqual(xml.get("limit"), "1337")
+
+    def test_listed(self):
+        out = make.lookup(IP, listed=True)
+        self.assertEqual(_xml(out).get("listed"), "1")
+
+        out = make.lookup(IP, listed=False)
+        self.assertEqual(_xml(out).get("listed"), "0")
 
 class MakeTestRemove(unittest.TestCase):
     def test(self):

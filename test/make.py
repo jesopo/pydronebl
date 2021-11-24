@@ -1,5 +1,6 @@
 import unittest
 from binascii  import hexlify
+from datetime  import datetime
 from uuid      import uuid4
 from xml.etree import ElementTree as et
 
@@ -64,6 +65,7 @@ class MakeTestLookup(unittest.TestCase):
         self.assertEqual(xml.get("type"),        "19")
         self.assertEqual(xml.get("listed"),      "2")
         self.assertEqual(xml.get("limit", None), None)
+        self.assertEqual(xml.get("stop",  None), None)
 
     def test_ip_without_type(self):
         out = make.lookup(IP)
@@ -90,6 +92,10 @@ class MakeTestLookup(unittest.TestCase):
 
         out = make.lookup(IP, listed=False)
         self.assertEqual(_xml(out).get("listed"), "0")
+
+    def test_stop(self):
+        out = make.lookup(IP, stop=datetime(2021, 11, 24, 18, 36, 00))
+        self.assertEqual(_xml(out).get("stop"), "1637778960")
 
 class MakeTestRemove(unittest.TestCase):
     def test(self):

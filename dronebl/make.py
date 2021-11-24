@@ -1,3 +1,4 @@
+from datetime  import datetime
 from typing    import List, Optional, Union
 from xml.etree import ElementTree as et
 
@@ -13,7 +14,8 @@ def lookup(
         query:  Union[str, int],
         type:   Optional[int]=None,
         limit:  Optional[int]=None,
-        listed: Optional[bool]=None
+        listed: Optional[bool]=None,
+        stop:   Optional[datetime]=None
         ) -> bytes:
 
     if listed == True:
@@ -37,6 +39,9 @@ def lookup(
 
     if limit is not None:
         element.set("limit", str(limit))
+
+    if stop is not None:
+        element.set("stop", str(int(stop.timestamp())))
 
     return et.tostring(element)
 

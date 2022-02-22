@@ -92,4 +92,4 @@ Lookup(198.51.100.123, id=3174874, type=19, datetime=2020-08-21T10:18:44, commen
 
 ## Contact
 
-Come say hi at [##jess on freenode](https://webchat.freenode.net/?channels=%23%23jess)
+Come say hi at [##jess on libera.chat](https://web.libera.chat/##jess)
